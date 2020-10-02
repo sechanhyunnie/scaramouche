@@ -82,6 +82,8 @@ async def man(ctx):
 					value='Will fetch the top <number> scores. If the message is too large to be sent on discord it will be sent as a text file', inline=False)
 	embed.add_field(name='`image <image_name> <number>`',
 					value='Will fetch the top <number> scores for the image specified. If the message is too large to be sent on discord it will be sent as a text file', inline=False)
+	embed.add_field(name='`rank <image_name> <team_id>`',
+					value='Will return the rank of the given ID for the given image if it exists', inline=False)
 	await ctx.send(embed=embed)
 
 
