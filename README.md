@@ -1,6 +1,6 @@
 # Daedalus
 
-Daedalus is a discord bot built to pull and view CSS scores from servers running [Minos](https://github.com/sourque/minos). 
+Daedalus is a discord bot built to pull and view CSS scores from servers running [Sarpedon](https://github.com/sourque/sarpedon). 
 
 ## Installation/Setup
 To get started make sure to have a server with python 3 installed and a discord bot setup in the applications folder. You will need to change the server IP and bot token in the pub_bot.py file.

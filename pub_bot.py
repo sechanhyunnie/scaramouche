@@ -176,20 +176,23 @@ async def scoreboard(ctx, num):
 @client.command()
 async def team(ctx, arg):
 	global remote
-	url = '{}scores/css?team={}'.format(remote, str(arg))
+	url = '{}team/{}'.format(remote, str(arg))
 	team_data = requests.get(url)
 	content = team_data.content
 	soup = BeautifulSoup(content, 'html.parser')
 	scores = soup.find_all('table', {"class": "table table-borderless table-dark table-striped"})
-	
+	image_tags = soup.find_all('tbody')
 	tds = []
+
+	image_scores_bad = image_tags[1]
+	try_to_fix_image_scores = image_scores_bad.find_all('td')
+	for score in try_to_fix_image_scores.find_all('a'):
+		print(score)
 
 	for thing in scores:
 		tds.append(thing.find_all('tr'))
 	
 	general_tags = tds[0]
-
-	image_tags = tds[1]
 	temp = []
 
 	for gentag in general_tags:
@@ -284,7 +287,7 @@ async def export(ctx):
 async def image(ctx, name, num):
 	os.system('rm -rf scoreboard.txt')
 	num = int(num)
-	url = '{}scores/css?image={}'.format(remote, str(name))
+	url = '{}image/{}'.format(remote, str(name))
 	team_image_data = requests.get(url)
 	content = team_image_data.content 
 	soup = BeautifulSoup(content, 'html.parser')
@@ -294,15 +297,15 @@ async def image(ctx, name, num):
 
 	scores = soup.find_all('tr')
 	comp = []
-	first_message = '''  Rank  Team	Images Time	    Score'''
+	first_message = '''  Rank   Team 	Time 	Score'''
 	for team in scores:
 		team = team.find_all('a')
-		team_info = [ team[0].contents[0], team[1].contents[0], team[2].contents[0], team[3].contents[0]]
+		team_info = [ team[0].contents[0], team[1].contents[0], team[2].contents[0]]
 		team_info_fixed = []
 		for element in team_info:
 			team_info_fixed.append(element.strip())
 		
-		detail = '''{}	{}	{}	{}'''.format(team_info_fixed[0],team_info_fixed[1], team_info_fixed[2], team_info_fixed[3])
+		detail = '''{}	{}	{}'''.format(team_info_fixed[0],team_info_fixed[1], team_info_fixed[2])
 		comp.append(detail)
 	
 	i = 1
