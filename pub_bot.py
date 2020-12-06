@@ -5,6 +5,7 @@ import requests
 import discord
 import ssl
 import os
+from tabulate import tabulate
 
 
 #       .o8                            .o8            oooo
@@ -95,7 +96,7 @@ async def top(ctx):
 
 	scores = soup.find_all('tr')
 	top_comp = []
-	first_message = '''  Rank   Team   Images	Time     Score'''
+	header =   ['Rank','Team','Images','Time','Score']
 	for team in scores[0:10]:
 		team = team.find_all('a')
 		team_info = [team[0].contents[0], team[1].contents[0],
@@ -103,25 +104,11 @@ async def top(ctx):
 		team_info_fixed = []
 		for element in team_info:
 			team_info_fixed.append(element.strip())
-
-		detail = '''{}	{}	{}	{}'''.format(
-			team_info_fixed[0], team_info_fixed[1], team_info_fixed[2], team_info_fixed[3])
+		detail = '''{}  {}  {}  {}'''.format(team_info_fixed[0], team_info_fixed[1], team_info_fixed[2], team_info_fixed[3])
+		detail = detail.split()
 		top_comp.append(detail)
 
-	i = 1
-	new = []
-	new.append(first_message)
-	for lin in top_comp[0:10]:
-		n = ' #{}	'.format(i)
-		if len(n) < 5:
-			n = '  #{}	'.format(i)
-		lin = n + lin
-		new.append(lin)
-		i += 1
-
-	formatted = '\n'
-	formatted = formatted.join(new)
-	formatted = '```' + formatted + '```'
+	formatted = "```" + tabulate(top_comp, header) + "```"
 
 	h_find = soup.find_all('h4')
 	round_title = h_find[0].text
@@ -146,34 +133,20 @@ async def scoreboard(ctx, num):
 	round_title = h_find[0].text
 
 	scores = soup.find_all('tr')
-	comp = []
-	first_message = '''  Rank  Team	Images Time	    Score'''
-	for team in scores:
+	top_comp = []
+	header =   ['Rank','Team','Images','Time','Score']
+	for team in scores[0:num]:
 		team = team.find_all('a')
 		team_info = [team[0].contents[0], team[1].contents[0],
 					team[2].contents[0], team[3].contents[0]]
 		team_info_fixed = []
 		for element in team_info:
 			team_info_fixed.append(element.strip())
+		detail = '''{}  {}  {}  {}'''.format(team_info_fixed[0], team_info_fixed[1], team_info_fixed[2], team_info_fixed[3])
+		detail = detail.split()
+		top_comp.append(detail)
 
-		detail = '''{}	{}	{}	{}'''.format(
-			team_info_fixed[0], team_info_fixed[1], team_info_fixed[2], team_info_fixed[3])
-		comp.append(detail)
-
-	i = 1
-	new = []
-	new.append(first_message)
-	for lin in comp[0:num]:
-		n = ' #{}	'.format(i)
-		if len(n) < 5:
-			n = '  #{}	'.format(i)
-		lin = n + lin
-		new.append(lin)
-		i += 1
-
-	formatted = '\n'
-	formatted_old = formatted.join(new)
-	formatted = '```' + formatted_old + '```'
+	formatted = "```" + tabulate(top_comp, header) + "```"
 
 	h_find = soup.find_all('h4')
 	round_title = h_find[0].text
@@ -188,7 +161,8 @@ async def scoreboard(ctx, num):
 	except:
 		os.system('touch scoreboard.txt')
 		fle = open('scoreboard.txt', 'w')
-		fle.write(formatted_old)
+		formatted.split('```')
+		fle.write(formatted[1])
 		fle.close()
 		await ctx.send(file=discord.File('scoreboard.txt'))
 
@@ -265,8 +239,8 @@ async def export(ctx):
 	round_title = h_find[0].text
 
 	scores = soup.find_all('tr')
-	comp = []
-	first_message = '''  Rank  Team	Images Time	    Score'''
+	top_comp = []
+	header =   ['Rank','Team','Images','Time','Score']
 	for team in scores:
 		team = team.find_all('a')
 		team_info = [team[0].contents[0], team[1].contents[0],
@@ -274,38 +248,20 @@ async def export(ctx):
 		team_info_fixed = []
 		for element in team_info:
 			team_info_fixed.append(element.strip())
+		detail = '''{}  {}  {}  {}'''.format(team_info_fixed[0], team_info_fixed[1], team_info_fixed[2], team_info_fixed[3])
+		detail = detail.split()
+		top_comp.append(detail)
 
-		detail = '''{}	{}	{}	{}'''.format(
-			team_info_fixed[0], team_info_fixed[1], team_info_fixed[2], team_info_fixed[3])
-		comp.append(detail)
-
-	i = 1
-	new = []
-	new.append(first_message)
-	for lin in comp:
-		n = ' #{}	'.format(i)
-		if len(n) < 5:
-			n = '  #{}	'.format(i)
-		lin = n + lin
-		new.append(lin)
-		i += 1
-
-	formatted = '\n'
-	formatted_old = formatted.join(new)
-	formatted = '```' + formatted_old + '```'
-
-	h_find = soup.find_all('h4')
-	round_title = h_find[0].text
+	table = tabulate(top_comp, header)
 
 	top_title = '''{} | Report Generated on {} | Server at {}'''.format(
 		round_title, get_time(), remote)
 
 	os.system('touch scoreboard.txt')
 	fle = open('scoreboard.txt', 'w')
-	fle.write(top_title)
-	fle.write(formatted_old)
+	fle.write(top_title + '\n')
+	fle.write(table)
 	fle.close()
-
 	await ctx.send(file=discord.File('scoreboard.txt'))
 
 
@@ -323,7 +279,7 @@ async def image(ctx, name, num):
 
 	scores = soup.find_all('tr')
 	comp = []
-	first_message = '''  Rank   Team 	Time 	Score'''
+	header =   ['Rank','Team','Time','Score']
 	for team in scores:
 		team = team.find_all('a')
 		team_info = [team[0].contents[0],
@@ -334,25 +290,13 @@ async def image(ctx, name, num):
 
 		detail = '''{}	{}	{}'''.format(
 			team_info_fixed[0], team_info_fixed[1], team_info_fixed[2])
+		detail = detail.split()
 		comp.append(detail)
 
-	i = 1
-	new = []
-	new.append(first_message)
-	for lin in comp[0:num]:
-		n = ' #{}	'.format(i)
-		if len(n) < 5:
-			n = '  #{}	'.format(i)
-		lin = n + lin
-		new.append(lin)
-		i += 1
-
-	formatted = '\n'
-	formatted_old = formatted.join(new)
-	formatted = '```' + formatted_old + '```'
+	formatted = "```" + tabulate(comp, header) + "```"
 
 	h_find = soup.find_all('h4')
-	round_title = '{} | [{}]'.format(h_find[0].text, name)
+	round_title = h_find[0].text
 
 	embed = discord.Embed(color=0x36393f)
 	embed.title = round_title
