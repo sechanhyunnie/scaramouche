@@ -136,7 +136,7 @@ async def top(ctx):
 
 @client.command()
 async def scoreboard(ctx, num):
-	os.remove('rm -rf scoreboard.txt')
+	os.remove('scoreboard.txt')
 	data = requests.get(remote)
 	num = int(num)
 	content = data.content
@@ -255,7 +255,7 @@ async def team(ctx, arg):
 
 @client.command()
 async def export(ctx):
-	os.remove('rm -rf scoreboard.txt')
+	os.remove('scoreboard.txt')
 	data = requests.get(remote)
 	content = data.content
 	soup = BeautifulSoup(content, 'html.parser')
@@ -309,7 +309,7 @@ async def export(ctx):
 
 @client.command()
 async def image(ctx, name, num):
-	os.remove('rm -rf scoreboard.txt')
+	os.remove('scoreboard.txt')
 	num = int(num)
 	url = '{}image/{}'.format(remote, str(name))
 	team_image_data = requests.get(url)
