@@ -123,7 +123,7 @@ async def top(ctx):
 
 @client.command()
 async def scoreboard(ctx, num):
-	os.system('rm -rf scoreboard.txt')
+	os.remove('scoreboard.txt')
 	data = requests.get(remote)
 	num = int(num)
 	content = data.content
@@ -159,8 +159,7 @@ async def scoreboard(ctx, num):
 	try:
 		await ctx.send(embed=embed)
 	except:
-		os.system('touch scoreboard.txt')
-		fle = open('scoreboard.txt', 'w')
+		fle = open('scoreboard.txt', 'w+')
 		formatted.split('```')
 		fle.write(formatted[1])
 		fle.close()
@@ -230,7 +229,7 @@ async def team(ctx, arg):
 
 @client.command()
 async def export(ctx):
-	os.system('rm -rf scoreboard.txt')
+	os.remove('scoreboard.txt')
 	data = requests.get(remote)
 	content = data.content
 	soup = BeautifulSoup(content, 'html.parser')
@@ -257,8 +256,7 @@ async def export(ctx):
 	top_title = '''{} | Report Generated on {} | Server at {}'''.format(
 		round_title, get_time(), remote)
 
-	os.system('touch scoreboard.txt')
-	fle = open('scoreboard.txt', 'w')
+	fle = open('scoreboard.txt', 'w+')
 	fle.write(top_title + '\n')
 	fle.write(table)
 	fle.close()
@@ -267,7 +265,7 @@ async def export(ctx):
 
 @client.command()
 async def image(ctx, name, num):
-	os.system('rm -rf scoreboard.txt')
+	os.remove('scoreboard.txt')
 	num = int(num)
 	url = '{}image/{}'.format(remote, str(name))
 	team_image_data = requests.get(url)
@@ -306,8 +304,7 @@ async def image(ctx, name, num):
 	try:
 		await ctx.send(embed=embed)
 	except:
-		os.system('touch scoreboard.txt')
-		fle = open('scoreboard.txt', 'w')
+		fle = open('scoreboard.txt', 'w+')
 		fle.write(formatted_old)
 		fle.close()
 		await ctx.send(file=discord.File('scoreboard.txt'))
