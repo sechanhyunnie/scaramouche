@@ -79,8 +79,8 @@ async def man(ctx):
 					value='Will fetch score details for the team specified', inline=False)
 	embed.add_field(
 		name='`export`', value='Will fetch a file containing current scores', inline=False)
-	embed.add_field(name='`scoreboard <number>`',
-					value='Will fetch the top <number> scores. If the message is too large to be sent on discord it will be sent as a text file', inline=False)
+	embed.add_field(name='`scoreboard <number>` or sc <number>',
+					value='Will fetch the top <number> scores. If the message is too large to be sent on Discord, it will be sent as a text file', inline=False)
 	embed.add_field(name='`image <image_name> <number>`',
 					value='Will fetch the top <number> scores for the image specified. If the message is too large to be sent on discord it will be sent as a text file', inline=False)
 	embed.add_field(name='`rank <image_name> <team_id>`',
@@ -100,13 +100,15 @@ async def top(ctx):
 	for team in scores[0:10]:
 		team = team.find_all('a')
 		team_info = [team[0].contents[0], team[1].contents[0],
-					team[2].contents[0], team[3].contents[0]]
+					team[2].contents[0], team[3].contents[0], team[4].contents[0]]
 		team_info_fixed = []
 		for element in team_info:
 			team_info_fixed.append(element.strip())
-		detail = '''{}  {}  {}  {}'''.format(team_info_fixed[0], team_info_fixed[1], team_info_fixed[2], team_info_fixed[3])
+		detail = '''{}  {}  {}  {}  {}'''.format(team_info_fixed[0], team_info_fixed[1], team_info_fixed[2], team_info_fixed[3], team_info_fixed[4])
 		detail = detail.split()
 		top_comp.append(detail)
+		print(detail)
+	print(tabulate(top_comp, header))
 
 	formatted = "```" + tabulate(top_comp, header) + "```"
 
@@ -121,11 +123,12 @@ async def top(ctx):
 	await ctx.send(embed=embed)
 
 
-@client.command()
-async def scoreboard(ctx, num):
-	os.remove('scoreboard.txt')
+@client.command(aliases=["sc"])
+async def scoreboard(ctx, num=None):
+	os.system('rm -rf scoreboard.txt')
 	data = requests.get(remote)
-	num = int(num)
+	if num is not None:
+		num = int(num)
 	content = data.content
 	soup = BeautifulSoup(content, 'html.parser')
 
@@ -138,13 +141,14 @@ async def scoreboard(ctx, num):
 	for team in scores[0:num]:
 		team = team.find_all('a')
 		team_info = [team[0].contents[0], team[1].contents[0],
-					team[2].contents[0], team[3].contents[0]]
+					team[2].contents[0], team[3].contents[0], team[4].contents[0]]
 		team_info_fixed = []
 		for element in team_info:
 			team_info_fixed.append(element.strip())
-		detail = '''{}  {}  {}  {}'''.format(team_info_fixed[0], team_info_fixed[1], team_info_fixed[2], team_info_fixed[3])
+		detail = '''{}  {}  {}  {}  {}'''.format(team_info_fixed[0], team_info_fixed[1], team_info_fixed[2], team_info_fixed[3], team_info_fixed[4])
 		detail = detail.split()
 		top_comp.append(detail)
+	print(tabulate(top_comp, header))
 
 	formatted = "```" + tabulate(top_comp, header) + "```"
 
@@ -159,7 +163,8 @@ async def scoreboard(ctx, num):
 	try:
 		await ctx.send(embed=embed)
 	except:
-		fle = open('scoreboard.txt', 'w+')
+		os.system('touch scoreboard.txt')
+		fle = open('scoreboard.txt', 'w')
 		formatted.split('```')
 		fle.write(formatted[1])
 		fle.close()
@@ -229,7 +234,7 @@ async def team(ctx, arg):
 
 @client.command()
 async def export(ctx):
-	os.remove('scoreboard.txt')
+	os.system('rm -rf scoreboard.txt')
 	data = requests.get(remote)
 	content = data.content
 	soup = BeautifulSoup(content, 'html.parser')
@@ -243,20 +248,22 @@ async def export(ctx):
 	for team in scores:
 		team = team.find_all('a')
 		team_info = [team[0].contents[0], team[1].contents[0],
-					team[2].contents[0], team[3].contents[0]]
+					team[2].contents[0], team[3].contents[0], team[4].contents[0]]
 		team_info_fixed = []
 		for element in team_info:
 			team_info_fixed.append(element.strip())
-		detail = '''{}  {}  {}  {}'''.format(team_info_fixed[0], team_info_fixed[1], team_info_fixed[2], team_info_fixed[3])
+		detail = '''{}  {}  {}  {}  {}'''.format(team_info_fixed[0], team_info_fixed[1], team_info_fixed[2], team_info_fixed[3], team_info_fixed[4])
 		detail = detail.split()
 		top_comp.append(detail)
+	print(tabulate(top_comp, header))
 
 	table = tabulate(top_comp, header)
 
 	top_title = '''{} | Report Generated on {} | Server at {}'''.format(
 		round_title, get_time(), remote)
 
-	fle = open('scoreboard.txt', 'w+')
+	os.system('touch scoreboard.txt')
+	fle = open('scoreboard.txt', 'w')
 	fle.write(top_title + '\n')
 	fle.write(table)
 	fle.close()
@@ -265,7 +272,7 @@ async def export(ctx):
 
 @client.command()
 async def image(ctx, name, num):
-	os.remove('scoreboard.txt')
+	os.system('rm -rf scoreboard.txt')
 	num = int(num)
 	url = '{}image/{}'.format(remote, str(name))
 	team_image_data = requests.get(url)
@@ -281,13 +288,13 @@ async def image(ctx, name, num):
 	for team in scores:
 		team = team.find_all('a')
 		team_info = [team[0].contents[0],
-					team[1].contents[0], team[2].contents[0]]
+					team[1].contents[0], team[2].contents[0], team[3].contents[0]]
 		team_info_fixed = []
 		for element in team_info:
 			team_info_fixed.append(element.strip())
 
-		detail = '''{}	{}	{}'''.format(
-			team_info_fixed[0], team_info_fixed[1], team_info_fixed[2])
+		detail = '''{}	{}	{}  {}'''.format(
+			team_info_fixed[0], team_info_fixed[1], team_info_fixed[2], team_info_fixed[3])
 		detail = detail.split()
 		comp.append(detail)
 
@@ -304,7 +311,8 @@ async def image(ctx, name, num):
 	try:
 		await ctx.send(embed=embed)
 	except:
-		fle = open('scoreboard.txt', 'w+')
+		os.system('touch scoreboard.txt')
+		fle = open('scoreboard.txt', 'w')
 		fle.write(formatted_old)
 		fle.close()
 		await ctx.send(file=discord.File('scoreboard.txt'))
