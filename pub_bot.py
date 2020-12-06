@@ -79,7 +79,7 @@ async def man(ctx):
 					value='Will fetch score details for the team specified', inline=False)
 	embed.add_field(
 		name='`export`', value='Will fetch a file containing current scores', inline=False)
-	embed.add_field(name='`scoreboard <number>` or sc <number>',
+	embed.add_field(name='`scoreboard <number>` or `sc <number>`',
 					value='Will fetch the top <number> scores. If the message is too large to be sent on Discord, it will be sent as a text file', inline=False)
 	embed.add_field(name='`image <image_name> <number>`',
 					value='Will fetch the top <number> scores for the image specified. If the message is too large to be sent on discord it will be sent as a text file', inline=False)
