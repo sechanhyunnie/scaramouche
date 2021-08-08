@@ -20,6 +20,7 @@ from tabulate import tabulate
 # SPECIFY REMOTE HERE AND YOUR BOT Token HERE
 remote = ''
 bot_id = ''
+empty_space = "	 󠁡 󠁡 󠁡 󠁡  󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡  	 󠁡 󠁡 󠁡 󠁡  󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡  	 󠁡 󠁡 󠁡 󠁡  󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡  	 󠁡 󠁡 󠁡 󠁡  󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡  󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡  󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡  󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡  󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡  󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡  󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡  󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 "
 # COMMAND PREFIX
 client = commands.Bot(command_prefix='d ')
 
@@ -95,8 +96,8 @@ async def top(ctx):
 	soup = BeautifulSoup(content, 'html.parser')
 
 	scores = soup.find_all('tr')
-	top_comp = []
-	header =   ['Rank','Team','Images','Time','Score']
+	top_comp = [[" ════ ", " ", " ════ ", " ", " ════ ", " ", " ════ "]]
+	header =   ['Rank',' ', 'Team', ' ', 'Time', ' ', 'Score']
 	for team in scores[0:10]:
 		team = team.find_all('a')
 		team_info = [team[0].contents[0], team[1].contents[0],
@@ -104,21 +105,17 @@ async def top(ctx):
 		team_info_fixed = []
 		for element in team_info:
 			team_info_fixed.append(element.strip())
-		detail = '''{}  {}  {}  {}  {}'''.format(team_info_fixed[0], team_info_fixed[1], team_info_fixed[2], team_info_fixed[3], team_info_fixed[4])
-		detail = detail.split()
-		top_comp.append(detail)
-		print(detail)
-	print(tabulate(top_comp, header))
+		top_comp.append([team_info_fixed[0], " ", team_info_fixed[1], " ", team_info_fixed[3], " ", team_info_fixed[4]])
 
-	formatted = "```" + tabulate(top_comp, header) + "```"
+	formatted = "```" + tabulate(top_comp, header, stralign="left", numalign="left", tablefmt="plain") + "```"
 
 	h_find = soup.find_all('h4')
 	round_title = h_find[0].text
 
 	embed = discord.Embed(color=0x36393f)
 	embed.title = round_title
-	embed.add_field(name="Time", value=get_time(), inline=False)
-	embed.description = formatted
+	embed.set_footer(text=empty_space + "\n" + get_time() + "\n" + empty_space)
+	embed.add_field(name="\u200b", value=formatted, inline=False)
 
 	await ctx.send(embed=embed)
 
@@ -135,8 +132,8 @@ async def scoreboard(ctx, num=None):
 	round_title = h_find[0].text
 
 	scores = soup.find_all('tr')
-	top_comp = []
-	header =   ['Rank','Team','Images','Time','Score']
+	top_comp = [[" ════ ", " ", " ════ ", " ", " ════ ", " ", " ════ "]]
+	header =   ['Rank',' ', 'Team', ' ', 'Time', ' ', 'Score']
 	for team in scores[0:num]:
 		team = team.find_all('a')
 		team_info = [team[0].contents[0], team[1].contents[0],
@@ -144,20 +141,17 @@ async def scoreboard(ctx, num=None):
 		team_info_fixed = []
 		for element in team_info:
 			team_info_fixed.append(element.strip())
-		detail = '''{}  {}  {}  {}  {}'''.format(team_info_fixed[0], team_info_fixed[1], team_info_fixed[2], team_info_fixed[3], team_info_fixed[4])
-		detail = detail.split()
-		top_comp.append(detail)
-	print(tabulate(top_comp, header))
+		top_comp.append([team_info_fixed[0], " ", team_info_fixed[1], " ", team_info_fixed[3], " ", team_info_fixed[4]])
 
-	formatted = "```" + tabulate(top_comp, header) + "```"
+	formatted = "```" + tabulate(top_comp, header, stralign="left", numalign="left", tablefmt="plain") + "```"
 
 	h_find = soup.find_all('h4')
 	round_title = h_find[0].text
 
 	embed = discord.Embed(color=0x36393f)
 	embed.title = round_title
-	embed.add_field(name="Time", value=get_time(), inline=False)
-	embed.description = formatted
+	embed.set_footer(text=empty_space + "\n" + get_time() + "\n" + empty_space)
+	embed.add_field(name="\u200b", value=formatted, inline=False)
 
 	try:
 		await ctx.send(embed=embed)
@@ -172,13 +166,13 @@ async def scoreboard(ctx, num=None):
 @client.command()
 async def team(ctx, arg):
 	global remote
-	url = '{}team/{}'.format(remote, str(arg))
+	url = '{}/team/{}'.format(remote, str(arg))
 	team_data = requests.get(url)
 	content = team_data.content
 	soup = BeautifulSoup(content, 'html.parser')
 	scores = soup.find_all(
 		'table', {"class": "table table-borderless table-dark table-striped"})
-	image_tags = soup.find_all('tbody')
+	image_tags = soup.find('tbody')
 	tds = []
 
 	image_scores_bad = image_tags[1]
@@ -269,7 +263,7 @@ async def export(ctx):
 @client.command()
 async def image(ctx, name, num):
 	num = int(num)
-	url = '{}image/{}'.format(remote, str(name))
+	url = '{}/image/{}'.format(remote, str(name))
 	team_image_data = requests.get(url)
 	content = team_image_data.content
 	soup = BeautifulSoup(content, 'html.parser')
