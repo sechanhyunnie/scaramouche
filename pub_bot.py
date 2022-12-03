@@ -18,11 +18,11 @@ from tabulate import tabulate
 
 
 # SPECIFY REMOTE HERE AND YOUR BOT Token HERE
-remote = ''
-bot_id = ''
+remote = '1047875622841634826'
+bot_id = 'MTAzOTkxOTMzMDU1NDU1MjM2MA.GxHlX3.vb2mS5OOiCo8uKErj1AHAcpVxMMkB7JuE7q84A'
 empty_space = "	 󠁡 󠁡 󠁡 󠁡  󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡  	 󠁡 󠁡 󠁡 󠁡  󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡  	 󠁡 󠁡 󠁡 󠁡  󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡  	 󠁡 󠁡 󠁡 󠁡  󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡  󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡  󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡  󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡  󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡  󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡  󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡  󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 󠁡 "
 # COMMAND PREFIX
-client = commands.Bot(command_prefix='d ')
+client = commands.Bot(command_prefix='&')
 
 
 def get_time():
